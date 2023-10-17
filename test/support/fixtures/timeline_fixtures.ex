@@ -1,7 +1,7 @@
-defmodule Chirp.TimelineFixtures do
+defmodule Twix.TimelineFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Chirp.Timeline` context.
+  entities via the `Twix.Timeline` context.
   """
 
   @doc """
@@ -16,7 +16,7 @@ defmodule Chirp.TimelineFixtures do
         repos_count: "some repos_count",
         username: "some username"
       })
-      |> Chirp.Timeline.create_post()
+      |> Twix.Timeline.create_post()
 
     post
   end
@@ -33,7 +33,7 @@ defmodule Chirp.TimelineFixtures do
         repos_count: 42,
         username: "some username"
       })
-      |> Chirp.Timeline.create_post()
+      |> Twix.Timeline.create_post()
 
     post
   end

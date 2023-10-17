@@ -7,19 +7,19 @@
 # General application configuration
 import Config
 
-config :chirp,
-  ecto_repos: [Chirp.Repo],
+config :twix,
+  ecto_repos: [Twix.Repo],
   generators: [timestamp_type: :utc_datetime]
 
 # Configures the endpoint
-config :chirp, ChirpWeb.Endpoint,
+config :twix, TwixWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Phoenix.Endpoint.Cowboy2Adapter,
   render_errors: [
-    formats: [html: ChirpWeb.ErrorHTML, json: ChirpWeb.ErrorJSON],
+    formats: [html: TwixWeb.ErrorHTML, json: TwixWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: Chirp.PubSub,
+  pubsub_server: Twix.PubSub,
   live_view: [signing_salt: "CP6+nN6y"]
 
 # Configures the mailer
@@ -29,7 +29,7 @@ config :chirp, ChirpWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :chirp, Chirp.Mailer, adapter: Swoosh.Adapters.Local
+config :twix, Twix.Mailer, adapter: Swoosh.Adapters.Local
 
 # Configure esbuild (the version is required)
 config :esbuild,

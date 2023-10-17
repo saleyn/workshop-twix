@@ -1,4 +1,4 @@
-# Chirp
+# Twix
 
 To start your Phoenix server:
 

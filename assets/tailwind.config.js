@@ -8,8 +8,8 @@ const path = require("path")
 module.exports = {
   content: [
     "./js/**/*.js",
-    "../lib/chirp_web.ex",
-    "../lib/chirp_web/**/*.*ex"
+    "../lib/twix_web.ex",
+    "../lib/twix_web/**/*.*ex"
   ],
   theme: {
     extend: {
