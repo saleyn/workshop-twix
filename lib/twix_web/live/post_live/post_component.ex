@@ -12,12 +12,17 @@ defmodule TwixWeb.PostLive.PostComponent do
       |> then(fn {{yy, mm, dd}, {h, m, s}} ->
         :io_lib.format("~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w", [yy, mm, dd, h, m, s])
       end)
-    assigns = assign(assigns, updated_at: updated_at)
+    assigns =
+      assigns
+      |> assign(:updated_at, updated_at)
+      |> assign(:likes_icon, assigns.post.likes_count > 0 && "hero-heart-solid" || "hero-heart")
+      |> assign(:likes_class, assigns.post.likes_count > 0 && "text-red-600")
+      |> assign(:robot_icon, Integer.to_string(Kernel.rem(100 + assigns.post.id, 10)))
     ~H"""
-    <div id={@dom_id <> "x"} class="post rounded border flex flex-col p-4 mt-2">
+    <div id={@dom_id <> "x"} class="post rounded border flex flex-col p-4 mt-2 bg-slate-50">
       <div class="flex">
         <div class="pr-2 pb-2">
-          <img class="w-14 h-14 rounded-full" src="https://robohash.org/KDU.png?set=set2" alt="Avatar"/>
+          <img class="w-14 h-14 rounded-full" src={"https://robohash.org/#{@robot_icon}.png?set=set3"} alt="Avatar"/>
         </div>
         <div class="w-full">
           <div class="flex place-content-between w-full">
@@ -30,7 +35,7 @@ defmodule TwixWeb.PostLive.PostComponent do
       <div class="flex gap-2 w-full place-content-between">
         <div class="flex gap-5">
           <div><.link phx-click="like" phx-target={@myself}>
-            <.icon name={@post.likes_count > 0 && "hero-heart-solid" || "hero-heart"} class={@post.likes_count > 0 && "text-red-600"}/>
+            <.icon name={@likes_icon} class={@likes_class}/>
           </.link> <%= @post.likes_count %></div>
           <div><.link phx-click="repost" phx-target={@myself}><.icon name="hero-arrow-path"/></.link> <%= @post.repos_count %></div>
         </div>
@@ -43,7 +48,7 @@ defmodule TwixWeb.PostLive.PostComponent do
             phx-click="delete" phx-target={@myself}
             data-confirm="Are you sure?"
           >
-            <.icon name="hero-x-circle" class="w-6 h-6 text-red-500" title="Delete"/>
+            <.icon name="hero-trash" class="w-6 h-6 text-red-500" title="Delete"/>
           </.link>
         </div>
       </div>
