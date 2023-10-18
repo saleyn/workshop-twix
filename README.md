@@ -1,5 +1,19 @@
 # Twix
 
+This project illustrates features of Phoenix/LiveView that include
+
+  * LiveView form editing with validation
+  * PubSub subscriptions
+  * Broadcasting events and viewing updates reactively in real-time 
+  * Progressive scrolling of large data sets
+
+The project shows the power of Phoenix/LiveView development that allows
+to implement sophisticated logic rapidly using a single language without
+needing to add any Javascript.
+
+It is a more advanced version of Chris McCord's post
+https://www.youtube.com/watch?v=MZvmYaFkNJI.
+
 To start your Phoenix server:
 
   * Run `mix setup` to install and setup dependencies
