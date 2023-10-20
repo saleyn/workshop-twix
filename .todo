@@ -1,61 +1,68 @@
-1. Install phx.new
-  mix archive.install hex phx_new
-2. Install postgres
+1. Install postgres
   sudo pacman -S postgresql
-  sudo mkdir /run/postgresql
-  sudo mkdir -p /var/lib/postgres/data
-  sudo chown postgres:postgres /var/lib/postgres/data
-  sudo touch /var/log/postgres.log
-  sudo chown postgres:postgres /var/log/postgres.log
-  sudo su - postgres
-  initdb –locale $LANG -E UTF8 -D /var/lib/postgres/data/
+  sudo install -d /run/postgresql -o postgres -g postgres
+  sudo install -d /var/lib/postgres/data -o postgres -g postgres
+  sudo install -o postgres -g postgres /dev/null /var/log/postgres.log
+  sudo su - postgres -c "initdb --locale $LANG -E UTF8 -D /var/lib/postgres/data"
   exit
-  # Start the DB
-  pg_ctl -D /var/lib/postgres/data/ -1 /var/log/postgres.log start
+  # Start the DB using one of the two methods (depending on systemd)
+  * sudo systemctl start postgresql
+  * pg_ctl -D /var/lib/postgres/data/ -1 /var/log/postgres.log start
+
+  (optional)
   sudo -u postgres psql
   > CREATE USER new_user WITH ENCRYPTED PASSWORD 'newpass';
-  
-3. mix phx.new twix --live       # --line adds LiveView dependencies)
+
+2. Install phx.new
+  mix archive.install hex phx_new
+
+3. Install "ElixirLS" and "Phoenix Framework" extensions
+
+---------
+1. mix phx.new twix --live       # --line adds LiveView dependencies)
    $ cd twix
-4. mix phx.gen.live Timeline Post posts username body likes_count:integer repos_count:integer
+2. mix phx.gen.live Timeline Post posts username body likes_count:integer repos_count:integer
    $ code . &
    # Install Phoenix extension
-5. Copy live routes to the router.ex
+3. Copy live routes to the router.ex
 
-6. Bootstrap the DB: mix setup
+4. Bootstrap the DB:
+   $ mix setup
 
-7. Adjust rules for live_reload:
+5. Adjust rules for live_reload:
    - Open dev.exs:
    - Add this to live_reload config: ~r"lib/chirp/timeline/.*ex$",
 
-8. Run iex -S mix phx.server     # Start the app
-9.   Point browser to localhost:4000, click on "New Post"
-10.  Modify the model to adjust the fields:
+6. Run iex -S mix phx.server     # Start the app
+7.   Point browser to localhost:4000, click on "New Post"
+8.   Modify the model to adjust the fields:
     - open live/post_live/form_component.ex
       - Change type of "Body" input to "textarea"
       - Remove the username, likes_count, repos_count inputs
       - Remove subtitle
-       
-11.  Add validations
+9.  Add path to config file wather (to see changes in post.ex):
+    -   ~r"lib/twix/.*.ex$",
+
+10.  Add validations
     - open lib/timeline/posts.ex
         schema "post" do
           field :body, :string
           field :username, :string, default: "serge"
           field :likes_count, :integer, default: 0
-          field :repos_count, :integer, default: 0     
+          field :repos_count, :integer, default: 0
           ...
         end
-        
+
         def changeset(post, attrs) do
           post
           |> cast(attrs, [:body])
           |> validate_required([:body])
           |> validate_length(:body, min: 2, max: 256)
         end
-        
+
     - Illustrate in the browser that New/Edit validations work
- 
-12. Prettify Edit/Delete by adding heroicons
+
+11. Prettify Edit/Delete by adding heroicons
     - Modify live/post_live/index.html.heex
       - Add support for 'title' attribute for .icon:
         Modify core_components.ex (icon/1), to:
@@ -65,14 +72,17 @@
           def icon(%{name: "hero-" <> _} = assigns) do
             ~H"""
             <span class={[@name, @class]}>
-            <%= if not is_nil(:title) do %>
+            <%= if not is_nil(@title) do %>
               <title><%= @title %></title>
             <% end %>
             </span>
             """
-          end        
+          end
 
       - <.icon name="hero-pencil-square" class="w-6 h-6 text-green-600" title="Edit"/>
-      - <.icon name="hero-x-circle" class="w-6 h-6 text-red-500" title="Delete"/>
-      
+      - <.icon name="hero-trash" class="w-6 h-6 text-red-500" title="Delete"/>
+
       - Modify
+
+12. Provision more data:
+    -  for i <- 21..25, do: Twix.Timeline.create_post(%{body: "Test-#{i}"})

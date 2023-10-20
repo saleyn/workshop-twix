@@ -4,8 +4,8 @@ defmodule TwixWeb.PostLive.Index do
   alias Twix.Timeline
   alias Twix.Timeline.Post
 
-  @page_limit 25
-  @client_max_pages 2
+  @page_limit Application.compile_env(Application.get_application(__MODULE__), :page_limit, 25)
+  @client_max_pages Application.compile_env(Application.get_application(__MODULE__), :client_max_pages, 2)
 
   # For progressive pagination see:
   # https://hexdocs.pm/phoenix_live_view/bindings.html#scroll-events-and-infinite-stream-pagination
@@ -14,15 +14,12 @@ defmodule TwixWeb.PostLive.Index do
   def mount(_params, _session, socket) do
     if connected?(socket), do: Timeline.subscribe()
     offset = 0
-    posts  = Timeline.list_posts(offset: offset, limit: @page_limit)
-    socket =
+    {:ok,
       socket
-      |> assign(:offset, offset)
-      |> assign(:limit, @page_limit)
-      |> assign(:end_of_timeline, length(posts) < @page_limit)
+      |> assign(offset: offset, limit: @page_limit)
       |> stream_configure(:posts, dom_id: &"post-#{&1.id}")
-      |> stream(:posts, posts, at: 0)
-    {:ok, socket}
+      |> paginate_posts(1)
+    }
   end
 
   @impl true
@@ -38,7 +35,7 @@ defmodule TwixWeb.PostLive.Index do
 
   @impl true
   def handle_info({TwixWeb.PostLive.FormComponent, {:saved, post}}, socket) do
-    {:noreply, stream_insert(socket, :posts, post)}
+    {:noreply, stream_insert(socket, :posts, post, at: 0)}
   end
 
   def handle_info({TwixWeb.PostLive.PostComponent, {:deleted, post}}, socket) do
@@ -48,55 +45,35 @@ defmodule TwixWeb.PostLive.Index do
   def handle_info({:timeline, pid, _event, _msg}, socket) when pid == self(), do:
     {:noreply, socket}
 
-  def handle_info({:timeline, _, :post_created, post}, socket) do
-    {:noreply, stream_insert(socket, :posts, post, at: 0)}
-  end
-
-  def handle_info({:timeline, _, :post_updated, post}, socket) do
-    {:noreply, stream_insert(socket, :posts, post)}
-  end
-
-  def handle_info({:timeline, _, :post_deleted, post}, socket) do
-    {:noreply, stream_delete(socket, :posts, post)}
+  def handle_info({:timeline, _, event, post}, socket) do
+    case event do
+      :post_created -> {:noreply, stream_insert(socket, :posts, post, at: 0) |> IO.inspect(label: "Created")}
+      :post_updated -> {:noreply, stream_insert(socket, :posts, post)}
+      :post_deleted -> {:noreply, stream_delete(socket, :posts, post)}
+    end
   end
 
   @impl true
   def handle_event("next-page", _, socket) do
-    socket =
-      socket
-      #|> update(:offset, & &1 + socket.assigns.limit)
-      #|> stream_new_posts()
-      |> paginate_posts(socket.assigns.offset + socket.assigns.limit)
-    {:noreply, socket}
+    {:noreply, paginate_posts(socket, 1)}
   end
 
   def handle_event("prev-page", _, socket) do
-    if socket.assigns.offset > 0 do
-      {:noreply, paginate_posts(socket, max(0, socket.assigns.offset - socket.assigns.limit))}
-    else
-      {:noreply, socket}
-    end
+    {:noreply, paginate_posts(socket, -1)}
   end
 
-  defp paginate_posts(socket, new_offset) when new_offset >= 0 do
-    %{offset: offset, limit: limit} = socket.assigns
-    posts = Timeline.list_posts(offset: new_offset, limit: limit)
-    len   = length(posts)
-    new_offset = new_offset >= offset && offset + len || offset - len
-    {posts, at, limit} =
-      if new_offset >= offset do
-        {posts, -1, -limit * @client_max_pages}
-      else
-        {Enum.reverse(posts), 0, limit * @client_max_pages}
-      end
+  defp paginate_posts(%{assigns: %{offset: old_offset, limit: limit}} = socket, pages) when pages in [-1, 1] do
+    offset      = pages < 0 && max(old_offset-limit,  0) || old_offset
+    count       = pages < 0 && max(old_offset-offset, 0) || limit
 
-    case posts do
-      [] ->
-        assign(socket, end_of_timeline: new_offset == offset)
-      _ ->
-        socket
-        |> assign(end_of_timeline: false, offset: new_offset)
-        |> stream(:posts, posts, at: at, limit: limit)
-    end
+    posts       = Timeline.list_posts(offset: offset, limit: count)
+    len         = length(posts)
+
+    new_offset  = max(0, old_offset + pages*len)
+    {posts, at} = pages > 0 && {posts, -1} || {Enum.reverse(posts), 0}
+
+    socket
+    |> assign(end_of_timeline: new_offset == old_offset, offset: new_offset)
+    |> stream(:posts, posts, at: at, limit: -pages * limit * @client_max_pages)
   end
 end

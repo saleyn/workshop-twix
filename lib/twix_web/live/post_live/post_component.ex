@@ -5,16 +5,9 @@ defmodule TwixWeb.PostLive.PostComponent do
 
   @impl true
   def render(assigns) do
-    updated_at =
-      assigns.post.updated_at
-      |> NaiveDateTime.to_erl()
-      |> :erlang.universaltime_to_localtime()
-      |> then(fn {{yy, mm, dd}, {h, m, s}} ->
-        :io_lib.format("~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w", [yy, mm, dd, h, m, s])
-      end)
     assigns =
       assigns
-      |> assign(:updated_at, updated_at)
+      |> assign(:updated_at, format_time(assigns.post.updated_at))
       |> assign(:likes_icon, assigns.post.likes_count > 0 && "hero-heart-solid" || "hero-heart")
       |> assign(:likes_class, assigns.post.likes_count > 0 && "text-red-600")
       |> assign(:robot_icon, Integer.to_string(Kernel.rem(100 + assigns.post.id, 10)))
@@ -22,11 +15,11 @@ defmodule TwixWeb.PostLive.PostComponent do
     <div id={@dom_id <> "x"} class="post rounded border flex flex-col p-4 mt-2 bg-slate-50">
       <div class="flex">
         <div class="pr-2 pb-2">
-          <img class="w-14 h-14 rounded-full" src={"https://robohash.org/#{@robot_icon}.png?set=set3"} alt="Avatar"/>
+          <img class="w-14 h-14 rounded-full bg-gray-300" src={"https://robohash.org/#{@robot_icon}.png?set=set3"} alt="Avatar"/>
         </div>
         <div class="w-full">
           <div class="flex place-content-between w-full">
-            <div><b>@<%= @post.username %></b></div>
+            <div class="bg-blue-100 rounded-lg px-1"><b>@<%= @post.username %></b></div>
             <div><%= @updated_at %></div>
           </div>
           <div class=""><.link navigate={~p"/posts/#{@id}"}><pre><%= @post.body %></pre></.link></div>
@@ -34,21 +27,13 @@ defmodule TwixWeb.PostLive.PostComponent do
       </div>
       <div class="flex gap-2 w-full place-content-between">
         <div class="flex gap-5">
-          <div><.link phx-click="like" phx-target={@myself}>
-            <.icon name={@likes_icon} class={@likes_class}/>
-          </.link> <%= @post.likes_count %></div>
-          <div><.link phx-click="repost" phx-target={@myself}><.icon name="hero-arrow-path"/></.link> <%= @post.repos_count %></div>
-        </div>
-        <div class="sr-only">
-          <.link navigate={~p"/posts/#{@id}"}>Show</.link>
+          <div><.link phx-click="like" phx-target={@myself}><.icon name={@likes_icon} class={@likes_class} title="Like"/></.link> <%= @post.likes_count %></div>
+          <div><.link phx-click="repost" phx-target={@myself}><.icon name="hero-arrow-path" title="Repost"/></.link> <%= @post.repos_count %></div>
         </div>
         <div class="">
           <.link patch={~p"/posts/#{@id}/edit"}><.icon name="hero-pencil-square" class="w-6 h-6 text-green-600" title="Edit"/></.link>
-          <.link
-            phx-click="delete" phx-target={@myself}
-            data-confirm="Are you sure?"
-          >
-            <.icon name="hero-trash" class="w-6 h-6 text-red-500" title="Delete"/>
+          <.link phx-click="delete" phx-target={@myself} data-confirm="Are you sure?">
+            <.icon name="hero-trash" class="w-6 h-6 text-red-400" title="Delete"/>
           </.link>
         </div>
       </div>
@@ -73,4 +58,14 @@ defmodule TwixWeb.PostLive.PostComponent do
     {:ok, post} = Timeline.inc_reposts(socket.assigns.post.id)
     {:noreply, assign(socket, :post, post)}
   end
+
+  def format_time(ts) do
+    ts
+    |> NaiveDateTime.to_erl()
+    |> :erlang.universaltime_to_localtime()
+    |> then(fn {{yy, mm, dd}, {h, m, s}} ->
+      :io_lib.format("~4..0w-~2..0w-~2..0w ~2..0w:~2..0w:~2..0w", [yy, mm, dd, h, m, s])
+    end)
+  end
+
 end

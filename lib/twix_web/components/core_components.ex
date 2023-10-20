@@ -39,6 +39,8 @@ defmodule TwixWeb.CoreComponents do
   attr :id, :string, required: true
   attr :show, :boolean, default: false
   attr :on_cancel, JS, default: %JS{}
+  attr :bg_color, :string, default: "bg-zinc-50/70"
+  attr :class, :string, default: nil
   slot :inner_block, required: true
 
   def modal(assigns) do
@@ -50,7 +52,7 @@ defmodule TwixWeb.CoreComponents do
       data-cancel={JS.exec(@on_cancel, "phx-remove")}
       class="relative z-50 hidden"
     >
-      <div id={"#{@id}-bg"} class="bg-zinc-50/90 fixed inset-0 transition-opacity" aria-hidden="true" />
+      <div id={"#{@id}-bg"} class={["fixed inset-0 transition-opacity", @class, @bg_color]} aria-hidden="true" />
       <div
         class="fixed inset-0 overflow-y-auto"
         aria-labelledby={"#{@id}-title"}
@@ -626,15 +628,19 @@ defmodule TwixWeb.CoreComponents do
     )
   end
 
-  def show_modal(js \\ %JS{}, id) when is_binary(id) do
+  def show_modal(js \\ %JS{}, id, opts \\ []) when is_binary(id) and (is_list(opts) or is_map(opts)) do
     js
     |> JS.show(to: "##{id}")
     |> JS.show(
       to: "##{id}-bg",
-      transition: {"transition-all transform ease-out duration-300", "opacity-0", "opacity-100"}
+      transition: {
+        opts[:transition] || "transition-all transform ease-out duration-300",
+        opts[:start_opacity] || "opacity-30",
+        opts[:end_opacity] || "opacity-100"
+      }
     )
     |> show("##{id}-container")
-    |> JS.add_class("overflow-hidden", to: "body")
+    #|> JS.add_class("overflow-hidden", to: "body")
     |> JS.focus_first(to: "##{id}-content")
   end
 
