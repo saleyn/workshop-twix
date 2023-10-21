@@ -21,7 +21,7 @@
 ---------
 1. mix phx.new twix --live       # --line adds LiveView dependencies)
    $ cd twix
-2. mix phx.gen.live Timeline Post posts username body likes_count:integer repos_count:integer
+2. mix phx.gen.live Timeline Post posts username body likes_count:integer repost_count:integer
    $ code . &
    # Install Phoenix extension
 3. Copy live routes to the router.ex

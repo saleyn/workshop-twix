@@ -14,6 +14,8 @@ needing to add any Javascript.
 It is a more advanced and updated version of Chris McCord's post
 https://www.youtube.com/watch?v=MZvmYaFkNJI.
 
+## Installation
+
 - To install Erlang/Elixir use the [asdf](https://asdf-vm.com/guide/getting-started.html) tool.
 
   * Install `asdf`:
@@ -44,7 +46,7 @@ https://www.youtube.com/watch?v=MZvmYaFkNJI.
   $ mix archive.install phx_new
   ```
 
-- For this project uses Postgres database. If you don't have it installed,
+- This project uses Postgres database. If you don't have it installed,
   install it on your system with your favorite installation method. On Arch
   Linux this can be accomplished by running `sudo pacman -S postgres`.
   Alternatively you can use `docker`:
@@ -61,6 +63,15 @@ To bootstrap the database and start your Phoenix server interactively, run:
   ```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+
+## Generating a new Phoenix project from scratch
+
+This project was created from a mix template using:
+
+```bash
+$ mix phx.new twix --live
+$ mix phx.gen.live Timeline Post posts username body likes_count:integer repos_count:integer
+```
 
 ## Learn more
 
