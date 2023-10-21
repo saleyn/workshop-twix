@@ -71,6 +71,17 @@ $ make run
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+For illustrating real-time client UI updates, open that URL in two or more
+browsers.
+
+Try to add/delete/update posts, and hit the "Like" or "Repost" buttons to see
+those updates propagated to all client browsers.
+
+Try to scroll the posts up and down and see progressive scrolling - the posts
+will be progressively loaded to the client browser maintaining only a subset
+of rows in the browser's memory.  You can inspect that using a Chrome JS
+Debugger (press `F12` in Chrome/Edge/Firefox).
+
 ## Seeding some sample data
 
 The following command will add 100 new posts:
