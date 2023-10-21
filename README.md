@@ -16,51 +16,58 @@ https://www.youtube.com/watch?v=MZvmYaFkNJI.
 
 ## Installation
 
-- To install Erlang/Elixir use the [asdf](https://asdf-vm.com/guide/getting-started.html) tool.
+### If you haven't already done so, install Erlang and Elixir
 
-  * Install `asdf`:
-  ```bash
-  $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
-  ```
-  * Add asdf environment to `~/.bashrc`:
-  ```bash
-  . "$HOME/.asdf/asdf.sh"
-  . "$HOME/.asdf/completions/asdf.bash"
-  ```
+- To install Erlang/Elixir, first install the [asdf](https://asdf-vm.com/guide/getting-started.html) tool:
 
-  * Install Erlang/Elixir plugins for asdf
-  ```bash
-  $ asdf plugin add erlang
-  $ asdf plugin add elixir
-  ```
+```bash
+$ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+```
+- Modify the shell environment by adding these lines to `~/.bashrc`:
+```bash
+. "$HOME/.asdf/asdf.sh"
+. "$HOME/.asdf/completions/asdf.bash"
+```
 
-  * Install the latest version of Erlang and Elixir
-  ```bash
-  $ asdf install erlang latest
-  $ asdf install elixir latest
-  ```
+- Install Erlang/Elixir plugins for asdf
+```bash
+$ asdf plugin add erlang
+$ asdf plugin add elixir
+```
 
-- Install Phoenix/LiveView
+- Install the latest version of Erlang and Elixir
+```bash
+$ asdf install erlang latest
+$ asdf install elixir latest
+```
 
-  ```bash
-  $ mix archive.install phx_new
-  ```
+### Install the Phoenix/LiveView plugin for mix
+
+```bash
+$ mix archive.install phx_new
+```
+
+### Install Postgres database
 
 - This project uses Postgres database. If you don't have it installed,
   install it on your system with your favorite installation method. On Arch
   Linux this can be accomplished by running `sudo pacman -S postgres`.
   Alternatively you can use `docker`:
-  ```bash
-  $ docker pull postgres
-  $ docker run --name postgres -e POSTGRES_PASSWORD_FILE=/run/secrets/postgres-passwd -d postgres
-  ```
+```bash
+$ docker pull postgres
+$ docker run --name postgres -e POSTGRES_PASSWORD_FILE=/run/secrets/postgres-passwd -d postgres
+```
+
+## Bootstraping
 
 To bootstrap the database and start your Phoenix server interactively, run:
 
-  ```bash
-  $ mix setup
-  $ make run
-  ```
+```bash
+$ mix setup
+$ make run
+```
+
+## Running
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
