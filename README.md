@@ -64,13 +64,21 @@ To bootstrap the database and start your Phoenix server interactively, run:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+## Seeding some sample data
+
+The following command will add 100 new posts:
+
+```bash
+$ mix run priv/repo/seeds.exs
+```
+
 ## Generating a new Phoenix project from scratch
 
 This project was created from a mix template using:
 
 ```bash
 $ mix phx.new twix --live
-$ mix phx.gen.live Timeline Post posts username body likes_count:integer repos_count:integer
+$ mix phx.gen.live Timeline Post posts username body likes_count:integer repost_count:integer
 ```
 
 ## Learn more
@@ -80,5 +88,5 @@ $ mix phx.gen.live Timeline Post posts username body likes_count:integer repos_c
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
-  * Cris McCord's post that inspired this project: 
+  * Cris McCord's post that inspired this project:
     https://www.youtube.com/watch?v=MZvmYaFkNJI

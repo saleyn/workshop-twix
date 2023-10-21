@@ -128,7 +128,7 @@ defmodule Twix.Timeline do
   def inc_reposts(id) do
     {1, [post]} =
       from(p in Post, where: p.id == ^id, select: p)
-      |> Repo.update_all(inc: [repos_count: 1], set: [updated_at: NaiveDateTime.utc_now()])
+      |> Repo.update_all(inc: [repost_count: 1], set: [updated_at: NaiveDateTime.utc_now()])
     broadcast({:ok, post}, :post_updated)
   end
 end

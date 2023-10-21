@@ -4,9 +4,9 @@ defmodule TwixWeb.PostLiveTest do
   import Phoenix.LiveViewTest
   import Twix.TimelineFixtures
 
-  @create_attrs %{body: "some body", username: "some username", likes_count: 42, repos_count: 42}
-  @update_attrs %{body: "some updated body", username: "some updated username", likes_count: 43, repos_count: 43}
-  @invalid_attrs %{body: nil, username: nil, likes_count: nil, repos_count: nil}
+  @create_attrs %{body: "some body", username: "some username", likes_count: 42, repost_count: 42}
+  @update_attrs %{body: "some updated body", username: "some updated username", likes_count: 43, repost_count: 43}
+  @invalid_attrs %{body: nil, username: nil, likes_count: nil, repost_count: nil}
 
   defp create_post(_) do
     post = post_fixture()

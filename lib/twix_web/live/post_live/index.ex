@@ -10,6 +10,11 @@ defmodule TwixWeb.PostLive.Index do
   # For progressive pagination see:
   # https://hexdocs.pm/phoenix_live_view/bindings.html#scroll-events-and-infinite-stream-pagination
 
+  @doc "Notify this liveview of the update of the post"
+  @spec notify(:post_created | :post_updated | :post_deleted, %Post{}) :: any()
+  def notify(event, post) when event in [:post_created, :post_updated, :post_deleted], do:
+    send(self(), {:timeline, nil, event, post})
+
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Timeline.subscribe()
@@ -34,14 +39,6 @@ defmodule TwixWeb.PostLive.Index do
   end
 
   @impl true
-  def handle_info({TwixWeb.PostLive.FormComponent, {:saved, post}}, socket) do
-    {:noreply, stream_insert(socket, :posts, post, at: 0)}
-  end
-
-  def handle_info({TwixWeb.PostLive.PostComponent, {:deleted, post}}, socket) do
-    {:noreply, stream_delete(socket, :posts, post)}
-  end
-
   def handle_info({:timeline, pid, _event, _msg}, socket) when pid == self(), do:
     {:noreply, socket}
 

@@ -2,6 +2,7 @@ defmodule TwixWeb.PostLive.FormComponent do
   use TwixWeb, :live_component
 
   alias Twix.Timeline
+  alias TwixWeb.PostLive
 
   @impl true
   def render(assigns) do
@@ -54,7 +55,7 @@ defmodule TwixWeb.PostLive.FormComponent do
   defp save_post(socket, :edit, post_params) do
     case Timeline.update_post(socket.assigns.post, post_params) do
       {:ok, post} ->
-        notify_parent({:saved, post})
+        notify_parent(:post_updated, post)
 
         {:noreply,
          socket
@@ -69,7 +70,7 @@ defmodule TwixWeb.PostLive.FormComponent do
   defp save_post(socket, :new, post_params) do
     case Timeline.create_post(post_params) do
       {:ok, post} ->
-        notify_parent({:saved, post})
+        notify_parent(:post_created, post)
 
         {:noreply,
          socket
@@ -85,5 +86,5 @@ defmodule TwixWeb.PostLive.FormComponent do
     assign(socket, :form, to_form(changeset))
   end
 
-  defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
+  defp notify_parent(event, post), do: PostLive.Index.notify(event, post)
 end

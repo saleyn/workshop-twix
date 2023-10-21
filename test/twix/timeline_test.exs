@@ -8,7 +8,7 @@ defmodule Twix.TimelineTest do
 
     import Twix.TimelineFixtures
 
-    @invalid_attrs %{body: nil, username: nil, likes_count: nil, repos_count: nil}
+    @invalid_attrs %{body: nil, username: nil, likes_count: nil, repost_count: nil}
 
     test "list_posts/0 returns all post" do
       post = post_fixture()
@@ -21,13 +21,13 @@ defmodule Twix.TimelineTest do
     end
 
     test "create_post/1 with valid data creates a post" do
-      valid_attrs = %{body: "some body", username: "some username", likes_count: "some likes_count", repos_count: "some repos_count"}
+      valid_attrs = %{body: "some body", username: "some username", likes_count: "some likes_count", repost_count: "some repost_count"}
 
       assert {:ok, %Post{} = post} = Timeline.create_post(valid_attrs)
       assert post.body == "some body"
       assert post.username == "some username"
       assert post.likes_count == "some likes_count"
-      assert post.repos_count == "some repos_count"
+      assert post.repost_count == "some repost_count"
     end
 
     test "create_post/1 with invalid data returns error changeset" do
@@ -36,13 +36,13 @@ defmodule Twix.TimelineTest do
 
     test "update_post/2 with valid data updates the post" do
       post = post_fixture()
-      update_attrs = %{body: "some updated body", username: "some updated username", likes_count: "some updated likes_count", repos_count: "some updated repos_count"}
+      update_attrs = %{body: "some updated body", username: "some updated username", likes_count: "some updated likes_count", repost_count: "some updated repost_count"}
 
       assert {:ok, %Post{} = post} = Timeline.update_post(post, update_attrs)
       assert post.body == "some updated body"
       assert post.username == "some updated username"
       assert post.likes_count == "some updated likes_count"
-      assert post.repos_count == "some updated repos_count"
+      assert post.repost_count == "some updated repost_count"
     end
 
     test "update_post/2 with invalid data returns error changeset" do
@@ -68,7 +68,7 @@ defmodule Twix.TimelineTest do
 
     import Twix.TimelineFixtures
 
-    @invalid_attrs %{body: nil, username: nil, likes_count: nil, repos_count: nil}
+    @invalid_attrs %{body: nil, username: nil, likes_count: nil, repost_count: nil}
 
     test "list_posts/0 returns all post" do
       post = post_fixture()
@@ -81,13 +81,13 @@ defmodule Twix.TimelineTest do
     end
 
     test "create_post/1 with valid data creates a post" do
-      valid_attrs = %{body: "some body", username: "some username", likes_count: 42, repos_count: 42}
+      valid_attrs = %{body: "some body", username: "some username", likes_count: 42, repost_count: 42}
 
       assert {:ok, %Post{} = post} = Timeline.create_post(valid_attrs)
       assert post.body == "some body"
       assert post.username == "some username"
       assert post.likes_count == 42
-      assert post.repos_count == 42
+      assert post.repost_count == 42
     end
 
     test "create_post/1 with invalid data returns error changeset" do
@@ -96,13 +96,13 @@ defmodule Twix.TimelineTest do
 
     test "update_post/2 with valid data updates the post" do
       post = post_fixture()
-      update_attrs = %{body: "some updated body", username: "some updated username", likes_count: 43, repos_count: 43}
+      update_attrs = %{body: "some updated body", username: "some updated username", likes_count: 43, repost_count: 43}
 
       assert {:ok, %Post{} = post} = Timeline.update_post(post, update_attrs)
       assert post.body == "some updated body"
       assert post.username == "some updated username"
       assert post.likes_count == 43
-      assert post.repos_count == 43
+      assert post.repost_count == 43
     end
 
     test "update_post/2 with invalid data returns error changeset" do

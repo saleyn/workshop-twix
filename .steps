@@ -38,7 +38,7 @@
 8.   Modify the model to adjust the fields:
     - open live/post_live/form_component.ex
       - Change type of "Body" input to "textarea"
-      - Remove the username, likes_count, repos_count inputs
+      - Remove the username, likes_count, repost_count inputs
       - Remove subtitle
 9.  Add path to config file wather (to see changes in post.ex):
     -   ~r"lib/twix/.*.ex$",
@@ -49,7 +49,7 @@
           field :body, :string
           field :username, :string, default: "serge"
           field :likes_count, :integer, default: 0
-          field :repos_count, :integer, default: 0
+          field :repost_count, :integer, default: 0
           ...
         end
 

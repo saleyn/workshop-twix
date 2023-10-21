@@ -6,7 +6,7 @@ defmodule Twix.Timeline.Post do
     field :body, :string
     field :username, :string, default: "serge"
     field :likes_count, :integer, default: 0
-    field :repos_count, :integer, default: 0
+    field :repost_count, :integer, default: 0
 
     timestamps(type: :utc_datetime)
   end

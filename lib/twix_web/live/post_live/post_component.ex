@@ -2,6 +2,7 @@ defmodule TwixWeb.PostLive.PostComponent do
   use TwixWeb, :live_component
 
   alias Twix.Timeline
+  alias TwixWeb.PostLive
 
   @impl true
   def render(assigns) do
@@ -28,7 +29,7 @@ defmodule TwixWeb.PostLive.PostComponent do
       <div class="flex gap-2 w-full place-content-between">
         <div class="flex gap-5">
           <div><.link phx-click="like" phx-target={@myself}><.icon name={@likes_icon} class={@likes_class} title="Like"/></.link> <%= @post.likes_count %></div>
-          <div><.link phx-click="repost" phx-target={@myself}><.icon name="hero-arrow-path" title="Repost"/></.link> <%= @post.repos_count %></div>
+          <div><.link phx-click="repost" phx-target={@myself}><.icon name="hero-arrow-path" title="Repost"/></.link> <%= @post.repost_count %></div>
         </div>
         <div>
           <.link patch={~p"/posts/#{@id}/edit"}><.icon name="hero-pencil-square" class="w-6 h-6 text-green-600" title="Edit"/></.link>
@@ -45,7 +46,7 @@ defmodule TwixWeb.PostLive.PostComponent do
   def handle_event("delete", _, socket) do
     post = Timeline.get_post!(socket.assigns.post.id)
     {:ok, _} = Timeline.delete_post(post)
-    send(self(), {__MODULE__, {:deleted, post}})
+    PostLive.Index.notify(:post_deleted, post)
     {:noreply, socket}
   end
 
