@@ -12,7 +12,7 @@ defmodule TwixWeb.PostLive.PostComponent do
       |> assign(:likes_class, assigns.post.likes_count > 0 && "text-red-600")
       |> assign(:robot_icon, Integer.to_string(Kernel.rem(100 + assigns.post.id, 10)))
     ~H"""
-    <div id={@dom_id <> "x"} class="post rounded border flex flex-col p-4 mt-2 bg-slate-50">
+    <div class="rounded border flex flex-col p-4 mt-2 bg-slate-50">
       <div class="flex">
         <div class="pr-2 pb-2">
           <img class="w-14 h-14 rounded-full bg-gray-300" src={"https://robohash.org/#{@robot_icon}.png?set=set3"} alt="Avatar"/>
@@ -22,7 +22,7 @@ defmodule TwixWeb.PostLive.PostComponent do
             <div class="bg-blue-100 rounded-lg px-1"><b>@<%= @post.username %></b></div>
             <div><%= @updated_at %></div>
           </div>
-          <div class=""><.link navigate={~p"/posts/#{@id}"}><pre><%= @post.body %></pre></.link></div>
+          <div><.link navigate={~p"/posts/#{@id}"}><pre><%= @post.body %></pre></.link></div>
         </div>
       </div>
       <div class="flex gap-2 w-full place-content-between">
@@ -30,7 +30,7 @@ defmodule TwixWeb.PostLive.PostComponent do
           <div><.link phx-click="like" phx-target={@myself}><.icon name={@likes_icon} class={@likes_class} title="Like"/></.link> <%= @post.likes_count %></div>
           <div><.link phx-click="repost" phx-target={@myself}><.icon name="hero-arrow-path" title="Repost"/></.link> <%= @post.repos_count %></div>
         </div>
-        <div class="">
+        <div>
           <.link patch={~p"/posts/#{@id}/edit"}><.icon name="hero-pencil-square" class="w-6 h-6 text-green-600" title="Edit"/></.link>
           <.link phx-click="delete" phx-target={@myself} data-confirm="Are you sure?">
             <.icon name="hero-trash" class="w-6 h-6 text-red-400" title="Delete"/>
