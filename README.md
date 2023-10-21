@@ -82,6 +82,8 @@ will be progressively loaded to the client browser maintaining only a subset
 of rows in the browser's memory.  You can inspect that using a Chrome JS
 Debugger (press `F12` in Chrome/Edge/Firefox).
 
+![image](https://github.com/saleyn/workshop-twix/assets/272543/2cc5c545-9be0-457d-be39-8aa7b695478f)
+
 ## Seeding some sample data
 
 The following command will add 100 new posts:
