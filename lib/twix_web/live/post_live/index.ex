@@ -47,7 +47,7 @@ defmodule TwixWeb.PostLive.Index do
 
   def handle_info({:timeline, _, event, post}, socket) do
     case event do
-      :post_created -> {:noreply, stream_insert(socket, :posts, post, at: 0) |> IO.inspect(label: "Created")}
+      :post_created -> {:noreply, stream_insert(socket, :posts, post, at: 0)}
       :post_updated -> {:noreply, stream_insert(socket, :posts, post)}
       :post_deleted -> {:noreply, stream_delete(socket, :posts, post)}
     end

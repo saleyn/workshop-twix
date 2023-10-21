@@ -11,9 +11,9 @@
   <div :for={ {id, post} <- @streams.posts } id={id}>
     <.live_component module={TwixWeb.PostLive.PostComponent} id={post.id} dom_id={id} post={post}/>
   </div>
-  <div id="posts-eot" :if={@end_of_timeline} class="mt-5 text-[20px] text-center w-full">
-    <div class="p-2 bg-slate-100 rounded"><.icon name="hero-no-symbol" class="place-self-center"/> End of posts <.icon name="hero-no-symbol" class="place-self-center"/></div>
-  </div>
+</div>
+<div id="posts-eot" :if={@end_of_timeline} class="mt-5 text-[20px] text-center w-full">
+  <div class="p-2 bg-slate-100 rounded"><.icon name="hero-no-symbol" class="place-self-center"/> End of posts <.icon name="hero-no-symbol" class="place-self-center"/></div>
 </div>
 
 <.modal :if={@live_action in [:new, :edit]} id="post-modal" show on_cancel={JS.patch(~p"/posts")}>

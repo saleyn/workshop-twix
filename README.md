@@ -4,24 +4,63 @@ This project illustrates features of Phoenix/LiveView that include
 
   * LiveView form editing with validation
   * PubSub subscriptions
-  * Broadcasting events and viewing updates reactively in real-time 
+  * Broadcasting events and viewing updates reactively in real-time
   * Progressive scrolling of large data sets
 
 The project shows the power of Phoenix/LiveView development that allows
 to implement sophisticated logic rapidly using a single language without
 needing to add any Javascript.
 
-It is a more advanced version of Chris McCord's post
+It is a more advanced and updated version of Chris McCord's post
 https://www.youtube.com/watch?v=MZvmYaFkNJI.
 
-To start your Phoenix server:
+- To install Erlang/Elixir use the [asdf](https://asdf-vm.com/guide/getting-started.html) tool.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+  * Install `asdf`:
+  ```bash
+  $ git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.13.1
+  ```
+  * Add asdf environment to `~/.bashrc`:
+  ```bash
+  . "$HOME/.asdf/asdf.sh"
+  . "$HOME/.asdf/completions/asdf.bash"
+  ```
+
+  * Install Erlang/Elixir plugins for asdf
+  ```bash
+  $ asdf plugin add erlang
+  $ asdf plugin add elixir
+  ```
+
+  * Install the latest version of Erlang and Elixir
+  ```bash
+  $ asdf install erlang latest
+  $ asdf install elixir latest
+  ```
+
+- Install Phoenix/LiveView
+
+  ```bash
+  $ mix archive.install phx_new
+  ```
+
+- For this project uses Postgres database. If you don't have it installed,
+  install it on your system with your favorite installation method. On Arch
+  Linux this can be accomplished by running `sudo pacman -S postgres`.
+  Alternatively you can use `docker`:
+  ```bash
+  $ docker pull postgres
+  $ docker run --name postgres -e POSTGRES_PASSWORD_FILE=/run/secrets/postgres-passwd -d postgres
+  ```
+
+To bootstrap the database and start your Phoenix server interactively, run:
+
+  ```bash
+  $ mix setup
+  $ make run
+  ```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
 ## Learn more
 
@@ -30,3 +69,5 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Docs: https://hexdocs.pm/phoenix
   * Forum: https://elixirforum.com/c/phoenix-forum
   * Source: https://github.com/phoenixframework/phoenix
+  * Cris McCord's post that inspired this project: 
+    https://www.youtube.com/watch?v=MZvmYaFkNJI
