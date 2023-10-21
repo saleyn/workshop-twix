@@ -597,11 +597,7 @@ defmodule TwixWeb.CoreComponents do
 
   def icon(%{name: "hero-" <> _} = assigns) do
     ~H"""
-    <span class={[@name, @class]}>
-    <%= if not is_nil(:title) do %>
-      <title><%= @title %></title>
-    <% end %>
-    </span>
+    <span class={[@name, @class]} title={@title}/>
     """
   end
 
