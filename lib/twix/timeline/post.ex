@@ -4,7 +4,7 @@ defmodule Twix.Timeline.Post do
 
   schema "post" do
     field :body, :string
-    field :username, :string, default: "serge"
+    field :username, :string, default: System.get_env("USER")
     field :likes_count, :integer, default: 0
     field :repost_count, :integer, default: 0
 
