@@ -18,6 +18,7 @@ defmodule TwixWeb.PostLive.FormComponent do
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save"
+        autocomplete="off"
       >
         <.input field={@form[:body]} type="textarea" label="Body" />
         <:actions>
