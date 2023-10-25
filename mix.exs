@@ -6,13 +6,14 @@ defmodule Twix.MixProject do
 
   def project do
     [
-      app:             :twix,
-      version:         "0.1.0",
-      elixir:          "~> 1.14",
-      elixirc_paths:   elixirc_paths(Mix.env()),
-      start_permanent: Mix.env() == :prod,
-      aliases:         aliases(),
-      deps:            deps()
+      app:              :twix,
+      version:          "0.1.0",
+      elixir:           "~> 1.14",
+      elixirc_paths:    elixirc_paths(Mix.env()),
+      start_permanent:  Mix.env() == :prod,
+      aliases:          aliases(),
+      deps:             deps(),
+      prune_code_paths: Mix.env() == :prod # Respect ERL_LIBS environment
     ]
   end
 
